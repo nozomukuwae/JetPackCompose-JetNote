@@ -28,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -46,14 +45,10 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun NoteScreen(
-    notes: List<Note> = listOf(
-        Note(title = "first note", description = "description 1"),
-        Note(title = "second note", description = "description 2")
-    )
+    notes: List<Note>,
+    onAddNote: (Note) -> Unit,
+    onRemoveNote: (Note) -> Unit
 ) {
-    var latestNotes = remember {
-        notes.toMutableStateList()
-    }
     var title by remember {
         mutableStateOf("")
     }
@@ -81,9 +76,7 @@ fun NoteScreen(
             },
             onSave = {
                 if (title.isNotEmpty() && description.isNotEmpty()) {
-                    latestNotes.add(
-                        Note(title = title, description = description)
-                    )
+                    onAddNote(Note(title = title, description = description))
                     title = ""
                     description = ""
                     Toast.makeText(context, "Note added", Toast.LENGTH_SHORT).show()
@@ -93,9 +86,7 @@ fun NoteScreen(
         Spacer(modifier = Modifier.height(8.dp))
         Divider()
         Spacer(modifier = Modifier.height(8.dp))
-        NoteList(notes = latestNotes) {
-            latestNotes.remove(it)
-        }
+        NoteList(notes = notes, onNoteClick = onRemoveNote)
     }
 }
 
@@ -187,6 +178,13 @@ fun NoteList(notes: List<Note>, onNoteClick: (Note) -> Unit) {
 @Composable
 fun NoteScreenPreview() {
     JetNoteTheme {
-        NoteScreen()
+        NoteScreen(
+            notes = listOf(
+                Note(title = "first note", description = "description 1"),
+                Note(title = "second note", description = "description 2")
+            ),
+            onAddNote = {},
+            onRemoveNote = {}
+        )
     }
 }
