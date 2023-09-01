@@ -3,8 +3,8 @@ package com.example.jetnote
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetnote.screen.NoteScreen
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             JetNoteTheme {
-                val noteViewModel: NoteViewModel by viewModels()
+                val noteViewModel = viewModel<NoteViewModel>()
                 NotesApp(noteViewModel)
             }
         }
@@ -27,10 +27,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NotesApp(noteViewModel: NoteViewModel = viewModel()) {
+    val noteList = noteViewModel.noteList.collectAsState().value
+
     NoteScreen(
-        notes = noteViewModel.getAllNotes(),
+        notes = noteList,
         onAddNote = { noteViewModel.addNote(it) },
-        onRemoveNote = { noteViewModel.removeNote(it) }
+        onRemoveNote = { noteViewModel.removeNote(it) },
     )
 }
 

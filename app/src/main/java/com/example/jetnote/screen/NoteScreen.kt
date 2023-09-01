@@ -41,13 +41,13 @@ import androidx.compose.ui.unit.dp
 import com.example.jetnote.R
 import com.example.jetnote.model.Note
 import com.example.jetnote.ui.theme.JetNoteTheme
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
 
 @Composable
 fun NoteScreen(
     notes: List<Note>,
     onAddNote: (Note) -> Unit,
-    onRemoveNote: (Note) -> Unit
+    onRemoveNote: (Note) -> Unit,
 ) {
     var title by remember {
         mutableStateOf("")
@@ -58,10 +58,10 @@ fun NoteScreen(
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(8.dp)
+        modifier = Modifier.fillMaxWidth().padding(8.dp),
     ) {
         TopAppBar(
-            backgroundColor = Color.LightGray
+            backgroundColor = Color.LightGray,
         ) {
             Text(text = stringResource(id = R.string.app_name))
         }
@@ -81,7 +81,7 @@ fun NoteScreen(
                     description = ""
                     Toast.makeText(context, "Note added", Toast.LENGTH_SHORT).show()
                 }
-            }
+            },
         )
         Spacer(modifier = Modifier.height(8.dp))
         Divider()
@@ -103,7 +103,7 @@ fun TopFields(
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TextField(
             value = title,
@@ -113,7 +113,7 @@ fun TopFields(
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(onDone = {
                 keyboardController?.hide()
-            })
+            }),
         )
         Spacer(modifier = Modifier.height(8.dp))
         TextField(
@@ -124,12 +124,12 @@ fun TopFields(
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = {
                 keyboardController?.hide()
-            })
+            }),
         )
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = onSave,
-            shape = CircleShape
+            shape = CircleShape,
         ) {
             Text(text = "Save")
         }
@@ -138,11 +138,11 @@ fun TopFields(
 
 @Composable
 fun NoteList(notes: List<Note>, onNoteClick: (Note) -> Unit) {
-    val formatter = DateTimeFormatter.ofPattern("EEE, d MMM")
+    val formatter = SimpleDateFormat("EEE, d MMM")
 
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(notes) {
             Card(
@@ -151,23 +151,23 @@ fun NoteList(notes: List<Note>, onNoteClick: (Note) -> Unit) {
                     onNoteClick(it)
                 },
                 shape = RoundedCornerShape(topEnd = 16.dp),
-                backgroundColor = Color.LightGray
+                backgroundColor = Color.LightGray,
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
                 ) {
                     Text(
                         text = it.title,
-                        style = MaterialTheme.typography.subtitle2
+                        style = MaterialTheme.typography.subtitle2,
                     )
                     Text(
                         text = it.description,
-                        style = MaterialTheme.typography.subtitle1
+                        style = MaterialTheme.typography.subtitle1,
                     )
-//                    Text(
-//                        text = it.entryDate.format(formatter),
-//                        style = MaterialTheme.typography.caption
-//                    )
+                    Text(
+                        text = formatter.format(it.entryDate),
+                        style = MaterialTheme.typography.caption,
+                    )
                 }
             }
         }
@@ -181,10 +181,10 @@ fun NoteScreenPreview() {
         NoteScreen(
             notes = listOf(
                 Note(title = "first note", description = "description 1"),
-                Note(title = "second note", description = "description 2")
+                Note(title = "second note", description = "description 2"),
             ),
             onAddNote = {},
-            onRemoveNote = {}
+            onRemoveNote = {},
         )
     }
 }
