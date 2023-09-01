@@ -164,10 +164,10 @@ fun NoteList(notes: List<Note>, onNoteClick: (Note) -> Unit) {
                         text = it.description,
                         style = MaterialTheme.typography.subtitle1
                     )
-                    Text(
-                        text = it.entryDate.format(formatter),
-                        style = MaterialTheme.typography.caption
-                    )
+//                    Text(
+//                        text = it.entryDate.format(formatter),
+//                        style = MaterialTheme.typography.caption
+//                    )
                 }
             }
         }
